@@ -27,21 +27,33 @@ class InfoCell: UITableViewCell {
         return label
     }()
     
+    let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
 
-    
-    
-    
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        self.contentView.addSubview(stackView)
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(infoLabel)
+        
+        stackView.snp.makeConstraints {
+            $0.top.equalTo(20)
+            $0.leading.equalTo(20)
+            $0.trailing.equalTo(-20)
+            $0.bottom.equalTo(-20)
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
 }

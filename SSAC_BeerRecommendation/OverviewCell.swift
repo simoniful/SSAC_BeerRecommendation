@@ -42,7 +42,7 @@ class OverviewCell: UITableViewCell {
     
     let extensionButton: UIButton = {
         let button = UIButton()
-        button.setTitle("more", for: .normal)
+        button.setTitle("▼", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(extensionButtonClicked), for: .touchUpInside)
         button.titleLabel?.font = .boldSystemFont(ofSize: 12)
@@ -52,7 +52,7 @@ class OverviewCell: UITableViewCell {
     let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = 16
+        stackView.spacing = 12
         stackView.alignment = .fill
         stackView.distribution = .equalSpacing
         return stackView
@@ -102,8 +102,10 @@ class OverviewCell: UITableViewCell {
         isOpened = !isOpened
         if isOpened == false {
             overviewLabel.numberOfLines = 3
+            extensionButton.setTitle("▼", for: .normal)
         } else if isOpened == true {
             overviewLabel.numberOfLines = 0
+            extensionButton.setTitle("▲", for: .normal)
         }
         NotificationCenter.default.post(name: NSNotification.Name("extensionBtnClicked"), object: nil, userInfo: ["isOpened": isOpened, "sender": sender])
     }

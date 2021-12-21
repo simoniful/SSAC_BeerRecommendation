@@ -17,19 +17,21 @@ class ViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         let oveviewNibName = UINib(nibName: OverviewCell.identifier, bundle: nil)
         tableView.register(oveviewNibName, forCellReuseIdentifier: OverviewCell.identifier)
+        let infoNibName = UINib(nibName: InfoCell.identifier, bundle: nil)
+        tableView.register(infoNibName, forCellReuseIdentifier: InfoCell.identifier)
         return tableView
     }()
+    
     var infoData: Info?
     
     let model = [
-        "Overview", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle"
+        "Overview", "Information", "Food Pairing", "BrewerTips"
     ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchData { [self] Info in
             self.infoData = Info.first
-            self.tableView.reloadData()
             NotificationCenter.default.addObserver(self, selector: #selector(receiveNotification(notification:)), name: .myNotification, object: nil)
             view.addSubview(tableView)
             tableView.delegate = self
@@ -83,15 +85,36 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let infoData = self.infoData else { return UITableViewCell() }
         switch indexPath.row {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "OverviewCell", for: indexPath) as? OverviewCell else { return UITableViewCell()}
-            guard let infoData = self.infoData else { return UITableViewCell() }
             cell.clipsToBounds = false
             cell.contentView.clipsToBounds = false
             cell.nameLabel.text = infoData.name
             cell.categoryLabel.text = infoData.tagline
             cell.overviewLabel.text = infoData.description
+            return cell
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath) as? InfoCell else { return UITableViewCell()}
+            cell.titleLabel.text = "Information"
+            cell.infoLabel.text = """
+            ⬣ Alcohol by Volume: \(infoData.abv)
+            ⬣ International Bittering Units: \(infoData.ibu == nil ? "unknown" : String(describing: infoData.ibu!))
+            ⬣ Standard Reference Method: \(infoData.srm == nil ? "unknown" : String(describing: infoData.srm!))
+            ⬣ European Brewery Convention: \(String(describing: infoData.ebc!))
+            ⬣ pH: \(infoData.ph == nil ? "unknown" : String(describing: infoData.ph!))
+            """
+            return cell
+        case 2:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath) as? InfoCell else { return UITableViewCell()}
+            cell.titleLabel.text = "Food Pairing"
+            cell.infoLabel.text = "\(infoData.foodPairing.joined(separator: "\n"))"
+            return cell
+        case 3:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath) as? InfoCell else { return UITableViewCell()}
+            cell.titleLabel.text = "Brewers Tips"
+            cell.infoLabel.text = "\(infoData.brewersTips))"
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
@@ -101,12 +124,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
-            return UITableView.automaticDimension
-        default:
-            return 44
-        }
+        return UITableView.automaticDimension
     }
 }
 
