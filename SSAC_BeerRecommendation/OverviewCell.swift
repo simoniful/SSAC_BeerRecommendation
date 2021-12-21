@@ -36,7 +36,7 @@ class OverviewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 12)
         label.textColor = .black
         label.numberOfLines = 3
-        label.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius neque et quam molestie sollicitudin. Ut bibendum augue sit amet purus consequat blandit. Donec faucibus tellus arcu, non tincidunt dui interdum quis. Suspendisse interdum diam cursus ligula mollis vulputate. Ut sit amet risus et nulla consectetur sodales ut a ligula. Etiam varius nibh arcu, ac tempus mi euismod sit amet. Pellentesque et luctus nibh. Aliquam nec turpis porttitor, congue tellus quis, consequat lectus. Donec sollicitudin metus quam, in lacinia felis venenatis id. Praesent congue porttitor pretium. Fusce fringilla ante nibh, ut condimentum lorem consequat ut. Suspendisse efficitur lacus vel malesuada varius."
+        label.text = "제품내용"
         return label
     }()
     

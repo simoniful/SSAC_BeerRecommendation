@@ -6,9 +6,9 @@
 //
 
 import UIKit
-
-
-
+import Alamofire
+import Kingfisher
+import SnapKit
 
 class ViewController: UIViewController {
 
@@ -19,22 +19,28 @@ class ViewController: UIViewController {
         tableView.register(oveviewNibName, forCellReuseIdentifier: OverviewCell.identifier)
         return tableView
     }()
+    var infoData: Info?
     
     let model = [
-        "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle"
+        "Overview", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle", "NewYork", "London", "HongKong", "Seattle"
     ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(receiveNotification(notification:)), name: .myNotification, object: nil)
-        view.addSubview(tableView)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.frame = view.bounds
-        let header = StretchyTableHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height / 4))
-        header.imageView.image = UIImage(named: "Image")
-        header.layer.zPosition = -2
-        tableView.tableHeaderView = header
+        fetchData { [self] Info in
+            self.infoData = Info.first
+            self.tableView.reloadData()
+            NotificationCenter.default.addObserver(self, selector: #selector(receiveNotification(notification:)), name: .myNotification, object: nil)
+            view.addSubview(tableView)
+            tableView.delegate = self
+            tableView.dataSource = self
+            tableView.frame = view.bounds
+            let header = StretchyTableHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height / 3))
+            let url = URL(string: Info.first!.imageURL ?? "")
+            header.imageView.kf.setImage(with: url, placeholder: UIImage(named: "Image"))
+            header.layer.zPosition = -2
+            tableView.tableHeaderView = header
+        }
     }
     
     deinit {
@@ -43,6 +49,26 @@ class ViewController: UIViewController {
     
     @objc func receiveNotification(notification: NSNotification) {
         tableView.reloadData()
+    }
+    
+    func fetchData (completionHnadler: @escaping (_ list: [Info]) -> ())  {
+        let number = Int.random(in: 1...325)
+        let url = "https://api.punkapi.com/v2/beers/\(number)"
+        print(url)
+        AF.request(url, method: .get).validate().responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
+                    let convertedData = try JSONDecoder().decode([Info].self, from: jsonData)
+                    completionHnadler(convertedData)
+                } catch {
+                    print(error)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
 
@@ -60,8 +86,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.row {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "OverviewCell", for: indexPath) as? OverviewCell else { return UITableViewCell()}
+            guard let infoData = self.infoData else { return UITableViewCell() }
             cell.clipsToBounds = false
             cell.contentView.clipsToBounds = false
+            cell.nameLabel.text = infoData.name
+            cell.categoryLabel.text = infoData.tagline
+            cell.overviewLabel.text = infoData.description
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
