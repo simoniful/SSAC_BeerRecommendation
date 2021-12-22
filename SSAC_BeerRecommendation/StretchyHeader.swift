@@ -5,7 +5,6 @@
 //  Created by Sang hun Lee on 2021/12/20.
 //
 
-import Foundation
 import UIKit
 
 final class StretchyTableHeaderView: UIView {
@@ -31,6 +30,8 @@ final class StretchyTableHeaderView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        creatView()
+        setViewConstraint()
     }
     
     private func creatView() {
