@@ -14,7 +14,7 @@ struct Info: Codable {
     let imageURL: String?
     let abv: Double
     let ibu: Double?
-    let ebc: Int?
+    let ebc: Double?
     let srm: Double?
     let ph: Double?
     let foodPairing: [String]
@@ -57,7 +57,7 @@ extension Info {
         imageURL: String?? = nil,
         abv: Double? = nil,
         ibu: Double?? = nil,
-        ebc: Int?? = nil,
+        ebc: Double?? = nil,
         srm: Double?? = nil,
         ph: Double?? = nil,
         foodPairing: [String]? = nil,

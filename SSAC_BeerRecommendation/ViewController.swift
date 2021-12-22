@@ -12,7 +12,6 @@ import SnapKit
 import Zip
 
 class ViewController: UIViewController {
-
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -170,7 +169,6 @@ class ViewController: UIViewController {
     
     @objc func shareButtonClicked() {
         makeJsonFile()
-        
         var urlPaths = [URL]()
         if let path = documentsDirectoryPath() {
             let json = (path as NSString).appendingPathComponent("beerInfo.json")
@@ -190,14 +188,11 @@ class ViewController: UIViewController {
         catch {
           print("Something went wrong")
         }
-        
-
     }
     
     func fetchData (completionHnadler: @escaping (_ list: [Info]) -> ())  {
         let number = Int.random(in: 1...325)
         let url = "https://api.punkapi.com/v2/beers/\(number)"
-        print(url)
         AF.request(url, method: .get).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -243,7 +238,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             ⬣ Alcohol by Volume: \(infoData.abv)
             ⬣ International Bittering Units: \(infoData.ibu == nil ? "unknown" : String(describing: infoData.ibu!))
             ⬣ Standard Reference Method: \(infoData.srm == nil ? "unknown" : String(describing: infoData.srm!))
-            ⬣ European Brewery Convention: \(String(describing: infoData.ebc!))
+            ⬣ European Brewery Convention: \(infoData.ebc == nil ? "unknown" : String(describing: infoData.ebc!))
             ⬣ pH: \(infoData.ph == nil ? "unknown" : String(describing: infoData.ph!))
             """
             return cell
