@@ -24,6 +24,7 @@
 		F4569ECC2770CB3E00B0A61E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4569ECB2770CB3E00B0A61E /* Model.swift */; };
 		F4569ED22770E03C00B0A61E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F4569ED12770E03C00B0A61E /* Alamofire */; };
 		F4569ED52770EBC500B0A61E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F4569ED42770EBC500B0A61E /* Kingfisher */; };
+		F4569F1C2773606500B0A61E /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = F4569F1B2773606500B0A61E /* Zip */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 			files = (
 				F4569ED52770EBC500B0A61E /* Kingfisher in Frameworks */,
 				F4569EBA27706F7500B0A61E /* SnapKit in Frameworks */,
+				F4569F1C2773606500B0A61E /* Zip in Frameworks */,
 				F4569ED22770E03C00B0A61E /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -125,6 +127,7 @@
 				F4569EB927706F7500B0A61E /* SnapKit */,
 				F4569ED12770E03C00B0A61E /* Alamofire */,
 				F4569ED42770EBC500B0A61E /* Kingfisher */,
+				F4569F1B2773606500B0A61E /* Zip */,
 			);
 			productName = SSAC_BeerRecommendation;
 			productReference = F4569E95277044FF00B0A61E /* SSAC_BeerRecommendation.app */;
@@ -158,6 +161,7 @@
 				F4569EB827706F7500B0A61E /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F4569ED02770E03C00B0A61E /* XCRemoteSwiftPackageReference "Alamofire" */,
 				F4569ED32770EBC500B0A61E /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				F4569F1A2773606400B0A61E /* XCRemoteSwiftPackageReference "Zip" */,
 			);
 			productRefGroup = F4569E96277044FF00B0A61E /* Products */;
 			projectDirPath = "";
@@ -444,6 +448,14 @@
 				kind = branch;
 			};
 		};
+		F4569F1A2773606400B0A61E /* XCRemoteSwiftPackageReference "Zip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Zip.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -461,6 +473,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F4569ED32770EBC500B0A61E /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		F4569F1B2773606500B0A61E /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F4569F1A2773606400B0A61E /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

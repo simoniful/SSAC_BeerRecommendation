@@ -27,6 +27,15 @@
           "revision": "466db39ee4ef32b0f7c8cd9f009aaf42f80beace",
           "version": null
         }
+      },
+      {
+        "package": "Zip",
+        "repositoryURL": "https://github.com/marmelroy/Zip.git",
+        "state": {
+          "branch": "master",
+          "revision": "f34106fbf053319638ea42056eb5d131c6bb2149",
+          "version": null
+        }
       }
     ]
   },

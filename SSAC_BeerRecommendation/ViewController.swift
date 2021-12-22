@@ -9,6 +9,7 @@ import UIKit
 import Alamofire
 import Kingfisher
 import SnapKit
+import Zip
 
 class ViewController: UIViewController {
 
@@ -123,8 +124,74 @@ class ViewController: UIViewController {
         }
     }
     
+    func documentsDirectoryPath() -> String? {
+        let documentsDirectory = FileManager.SearchPathDirectory.documentDirectory
+        let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+        let path = NSSearchPathForDirectoriesInDomains(documentsDirectory, userDomainMask, true)
+        if let directoryPath = path.first {
+            return directoryPath
+        } else {
+            return nil
+        }
+    }
+    
+    func presentActivityViewController() {
+        let fileName = (documentsDirectoryPath()! as NSString).appendingPathComponent("beerInfo.zip")
+        let fileURL = URL(fileURLWithPath: fileName)
+        let vc = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
+        self.present(vc, animated: true, completion:  nil)
+    }
+    
+    func makeJsonFile() {
+        guard let infoData = self.infoData else { return }
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        encoder.dateEncodingStrategy = .iso8601
+        
+        do {
+            let jsonData = try encoder.encode(infoData)
+            guard let jsonToString = String(data: jsonData, encoding: .utf8) else {fatalError("Failed")}
+            
+            if let documentDirectory = FileManager.default.urls(for: .documentDirectory,
+                                                                in: .userDomainMask).first {
+                let pathWithFilename = documentDirectory.appendingPathComponent("beerInfo.json")
+                do {
+                    try jsonToString.write(to: pathWithFilename,
+                                         atomically: true,
+                                         encoding: .utf8)
+                } catch {
+                    print(error)
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     @objc func shareButtonClicked() {
-        print("share")
+        makeJsonFile()
+        
+        var urlPaths = [URL]()
+        if let path = documentsDirectoryPath() {
+            let json = (path as NSString).appendingPathComponent("beerInfo.json")
+            if FileManager.default.fileExists(atPath: json) {
+                urlPaths.append(URL(string: json)!)
+            } else {
+                print("저장할 데이터가 없습니다")
+            }
+        }
+        do {
+            let zipFilePath = try Zip.quickZipFiles(urlPaths, fileName: "beerInfo", progress: { progress in
+                print("\(progress)")
+            })
+            print("압축경로: \(zipFilePath)")
+            presentActivityViewController()
+        }
+        catch {
+          print("Something went wrong")
+        }
+        
+
     }
     
     func fetchData (completionHnadler: @escaping (_ list: [Info]) -> ())  {
